@@ -4,7 +4,7 @@
     <!-- Banner -->
     <section class="banner d-flex align-items-center text-center text-white">
       <div class="container">
-        <h1 class="display-4 fw-bold mb-3">📚 Hệ Thống Quản Lý Mượn Sách</h1>
+        <h1 class="display-4 fw-bold mb-3">📚 Hệ Thống Cho Mượn Sách</h1>
         <p class="lead mb-4">Tra cứu – mượn sách – quản lý dễ dàng & nhanh chóng</p>
         <router-link class="btn btn-light btn-lg px-4" to="/books">Xem Sách</router-link>
       </div>
@@ -35,8 +35,8 @@
         <div class="col-md-4">
           <div class="feature-card p-4 text-center shadow-sm">
             <h3>👨‍💼</h3>
-            <h5 class="fw-bold">Quản trị tiện lợi</h5>
-            <p>Nhân viên duyệt yêu cầu, theo dõi tình trạng sách dễ dàng.</p>
+            <h5 class="fw-bold">Nguồn sách đa dạng</h5>
+            <p>99% sách đều có ở đây</p>
           </div>
         </div>
 

@@ -1,7 +1,7 @@
 <template>
   <div class="card h-100 p-3">
 
-    <h5 class="fw-bold">{{ sach.tenSach }}</h5>
+    <h5 class="fw-bold">{{ sach.TenSach }}</h5>
 
     <p class="text-muted mb-1">✍️ Tác giả: {{ sach.tacGia }}</p>
     <p class="text-muted mb-1">📅 Năm XB: {{ sach.namXuatBan }}</p>

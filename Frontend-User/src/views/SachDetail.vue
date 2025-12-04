@@ -2,7 +2,7 @@
   <div>
     <h3>{{ sach?.tenSach }}</h3>
     <p>Tác giả: {{ sach?.tacGia }}</p>
-    <p>NXB: {{ sach?.maNXB?.tenNXB }}</p>
+    <p>NXB: {{ sach?.MaNXB?.tenNXB }}</p>
     <p>Số quyển: {{ sach?.soQuyen }}</p>
     <button v-if="isLogged && isDocGia" class="btn btn-primary" @click="requestBorrow">Yêu cầu mượn</button>
     <p v-else-if="!isLogged">Đăng nhập để mượn</p>

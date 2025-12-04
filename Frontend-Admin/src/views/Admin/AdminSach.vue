@@ -1,56 +1,104 @@
 <template>
-  <div class="container py-3">
+  <div class="admin-sach p-3">
+    <h3 class="mb-3">📚 Danh sách Sách</h3>
 
-    <h3 class="section-title">📚 Quản lý sách</h3>
+    <button class="btn btn-success mb-2" @click="$router.push('/admin/sach/add')">
+      Thêm Sách Mới
+    </button>
 
-    <!-- Form thêm sách -->
-    <div class="card p-3 mb-4">
-      <h5 class="mb-3">Thêm sách mới</h5>
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+         
+        
+          <th>Tên Sách</th>
+          <th>Tác Giả</th>
+          <th>Đơn Giá</th>
+          <th>Số Quyển</th>
+          <th>Năm Xuất Bản</th>
+          <th>Nhà Xuất Bản</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(book, index) in books" :key="book._id">
+         
+          
+          <td>{{ book.TenSach }}</td>
+          <td>{{ book.TacGia }}</td>
+          <td>{{ book.DonGia }}</td>
+          <td>{{ book.SoQuyen }}</td>
+          <td>{{ book.NamXuatBan }}</td>
+          <td>{{ book.MaNXB ? book.MaNXB.TenNXB : "Chưa có NXB" }}</td>
+          <td>
+            <button class="btn btn-sm btn-warning" @click="editBook(book._id)">Sửa</button>
+            
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
-      <form @submit.prevent="add">
-        <div class="row g-3">
-
-          <div class="col-md-4">
-            <input v-model="form.tenSach" class="form-control" placeholder="Tên sách" />
-          </div>
-
-          <div class="col-md-3">
-            <input v-model="form.tacGia" class="form-control" placeholder="Tác giả" />
-          </div>
-
-          <div class="col-md-2">
-            <input v-model="form.namXuatBan" class="form-control" placeholder="Năm XB" type="number" />
-          </div>
-
-          <div class="col-md-2">
-            <input v-model="form.soQuyen" class="form-control" placeholder="Số quyển" type="number" />
-          </div>
-
-          <div class="col-md-12 d-flex justify-content-end">
-            <button class="btn btn-primary mt-2">➕ Thêm sách</button>
-          </div>
-
-        </div>
-      </form>
-    </div>
-
-    <!-- Danh sách sách -->
-    <div class="row g-3">
-      <div class="col-md-3" v-for="item in sach" :key="item._id">
-        <div class="card h-100 p-3">
-
-          <h5>{{ item.tenSach }}</h5>
-          <p class="text-muted mb-1">Tác giả: {{ item.tacGia }}</p>
-          <p class="text-muted mb-1">Năm XB: {{ item.namXuatBan }}</p>
-          <p class="fw-bold">Số quyển: {{ item.soQuyen }}</p>
-
-          <button class="btn btn-danger btn-sm mt-2" @click="remove(item._id)">
-            🗑 Xóa
-          </button>
-
-        </div>
-      </div>
-    </div>
-
+    <p v-if="books.length === 0" class="text-muted">Không có sách nào!</p>
   </div>
 </template>
+
+<script>
+import axios from "axios";
+
+export default {
+  name: "AdminSach",
+  data() {
+    return {
+      books: [],
+    };
+  },
+  methods: {
+    fetchBooks() {
+      const token = localStorage.getItem("token");
+      axios
+        .get("http://localhost:5000/api/sach", {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        })
+        .then((res) => {
+          console.log("Danh sách sách:", res.data); // kiểm tra dữ liệu
+          this.books = res.data;
+        })
+        .catch((err) => {
+          console.error("Lỗi tải danh sách sách:", err.response?.data || err);
+          alert("Không thể tải danh sách sách!");
+        });
+    },
+
+    editBook(id) {
+      this.$router.push(`/admin/sach/edit/${id}`);
+    },
+
+    deleteBook(id) {
+      if (!confirm("Bạn có chắc muốn xóa sách này?")) return;
+
+      const token = localStorage.getItem("token");
+      axios
+        .delete(`http://localhost:5000/api/sach/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then(() => {
+          alert("Xóa sách thành công!");
+          this.fetchBooks();
+        })
+        .catch((err) => {
+          console.error("Lỗi xóa sách:", err.response?.data || err);
+          alert("Không thể xóa sách!");
+        });
+    },
+  },
+  mounted() {
+    this.fetchBooks();
+  },
+};
+</script>
+
+<style scoped>
+.admin-sach {
+  padding: 20px;
+}
+</style>

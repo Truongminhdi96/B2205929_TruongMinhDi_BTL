@@ -23,15 +23,14 @@
       <p>Thêm, sửa, xóa NXB và liên kết sách với NXB qua MaNXB</p>
     </section>
 
-    <!-- Quản lý Độc Giả -->
     <section class="mb-5">
-      <h3 class="mb-3">👤 Quản lý Độc Giả</h3>
-      <div class="d-flex gap-2 mb-2">
-        <button class="btn btn-primary" @click="goTo('admin/docgia/add')">Thêm độc giả</button>
-        <button class="btn btn-secondary" @click="goTo('admin/docgia')">Xem danh sách độc giả</button>
-      </div>
-      <p>Thêm, sửa, xóa độc giả và xem thông tin chi tiết</p>
-    </section>
+  <h3 class="mb-3">👤 Quản lý Độc Giả</h3>
+  <div class="d-flex gap-2 mb-2">
+    <!-- Bỏ nút Thêm độc giả -->
+    <button class="btn btn-primary" @click="goTo('admin/docgia')">Xem danh sách độc giả</button>
+  </div>
+  <p>Xem thông tin chi tiết độc giả</p>
+</section>
 
     <!-- Theo dõi mượn sách -->
     <section class="mb-5">

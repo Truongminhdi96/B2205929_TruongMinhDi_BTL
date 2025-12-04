@@ -18,6 +18,8 @@ app.use('/api/sach', require('./routes/sach.routes'));
 app.use('/api/nxb', require('./routes/nxb.routes'));
 app.use('/api/docgia', require('./routes/docgia.routes'));
 app.use('/api/theodoi', require('./routes/theodoi.routes'));
+app.use('/api/muonsach', require('./routes/muonsach.routes')); // chỉ cần 1 biến duy nhất
+app.use('/api/theodoi', require('./routes/theodoi.routes'));
 
 // Bắt route không tồn tại
 app.use((req, res) => {

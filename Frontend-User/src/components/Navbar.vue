@@ -36,6 +36,13 @@
 
           <!-- Đã đăng nhập -->
           <template v-else>
+            
+            <!-- Nút Lịch Sử Mượn -->
+            <li class="nav-item">
+              <router-link class="nav-link nav-item-custom" to="/user/borrow">
+                Lịch Sử Mượn
+              </router-link>
+            </li>
 
             <!-- Avatar + Dropdown -->
             <li class="nav-item dropdown">
@@ -53,23 +60,12 @@
               </a>
 
               <ul class="dropdown-menu dropdown-menu-end shadow">
-                <li>
-                  <router-link class="dropdown-item" to="/profile">Hồ sơ</router-link>
-                </li>
-
-                <li v-if="isAdmin">
-                  <router-link class="dropdown-item" to="/admin/sach">Quản trị</router-link>
-                </li>
-
-                <li><hr class="dropdown-divider" /></li>
-
                 <!-- Nút đăng xuất -->
                 <li>
                   <button class="dropdown-item text-danger" @click="logout">
                     Đăng xuất
                   </button>
                 </li>
-
               </ul>
             </li>
 
@@ -106,7 +102,6 @@ export default {
 
   created() {
     this.loadUser();
-    // Load lại user sau mỗi lần chuyển route
     this.$router.afterEach(() => this.loadUser());
   },
 
@@ -119,7 +114,7 @@ export default {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       this.user = null;
-      this.$router.push("/login"); // chuyển về login sau khi logout
+      this.$router.push("/login");
     }
   }
 };

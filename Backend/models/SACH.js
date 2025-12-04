@@ -6,7 +6,7 @@ const SachSchema = new mongoose.Schema({
   DonGia: Number,
   SoQuyen: Number,
   NamXuatBan: Number,
-  MaNXB: String,
+  MaNXB: { type: mongoose.Schema.Types.ObjectId, ref: "NHAXUATBAN" }, // sửa đây
   TacGia: String
 }, { collection: "SACH" });
 

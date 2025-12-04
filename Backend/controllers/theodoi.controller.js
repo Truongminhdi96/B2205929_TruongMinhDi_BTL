@@ -1,81 +1,52 @@
-const TheoDoi = require('../models/THEODOIMUONSACH');
-const Sach = require('../models/SACH');
+const TheoDoiMuon = require("../models/THEODOIMUONSACH");
+const Sach = require("../models/SACH");
 
-exports.requestBorrow = async (req, res) => {
+// Lấy lịch sử mượn của user
+exports.getUserBorrows = async (req, res) => {
   try {
-    const { maSach } = req.body;
-    const maDocGia = req.user.id;
-    const sach = await Sach.findById(maSach);
-    if (!sach) return res.status(404).json({ message: 'Sach not found' });
-    if (sach.soQuyen <= 0) return res.status(400).json({ message: 'No copies available' });
-    const reqDoc = new TheoDoi({ maDocGia, maSach, trangThai: 'cho_duyet' });
-    await reqDoc.save();
-    res.json(reqDoc);
-  } catch (err) { res.status(500).json({ message: err.message }); }
+    const userId = req.params.id;
+
+    // Chỉ user đăng nhập mới xem được
+    if (req.user.id !== userId) {
+      return res.status(403).json({ message: "Không có quyền xem lịch sử này" });
+    }
+
+    const borrows = await TheoDoiMuon.find({ MaDocGia: userId })
+      .populate("MaSach"); // lấy thông tin sách
+
+    res.json(borrows);
+  } catch (err) {
+    console.error("Lỗi getUserBorrows:", err);
+    res.status(500).json({ message: "Lỗi server khi lấy lịch sử mượn" });
+  }
 };
 
-exports.listForUser = async (req, res) => {
+// Trả sách
+exports.returnBook = async (req, res) => {
   try {
-    const data = await TheoDoi.find({ maDocGia: req.user.id }).populate('maSach');
-    res.json(data);
-  } catch (err) { res.status(500).json({ message: err.message }); }
-};
+    const borrowId = req.params.id;
 
-exports.listAll = async (req, res) => {
-  try {
-    const data = await TheoDoi.find().populate('maSach').populate('maDocGia');
-    res.json(data);
-  } catch (err) { res.status(500).json({ message: err.message }); }
-};
+    const borrow = await TheoDoiMuon.findById(borrowId).populate("MaSach");
+    if (!borrow) return res.status(404).json({ message: "Không tìm thấy phiếu mượn" });
 
-exports.confirmBorrow = async (req, res) => {
-  try {
-    const id = req.params.id; // theoDoi id
-    const record = await TheoDoi.findById(id);
-    if (!record) return res.status(404).json({ message: 'Not found' });
-    if (record.trangThai !== 'cho_duyet') return res.status(400).json({ message: 'Invalid status' });
+    if (borrow.NgayTra) return res.status(400).json({ message: "Sách đã trả rồi" });
 
-    // decrement book copies
-    const sach = await Sach.findById(record.maSach);
-    if (sach.soQuyen <= 0) return res.status(400).json({ message: 'No copies' });
-    sach.soQuyen -= 1;
-    await sach.save();
+    // Chỉ độc giả đó mới trả sách
+    if (req.user.id !== String(borrow.MaDocGia)) {
+      return res.status(403).json({ message: "Không có quyền trả sách này" });
+    }
 
-    record.trangThai = 'da_duoc_muon';
-    record.ngayMuon = new Date();
-    record.nguoiXacNhan = req.user.id;
-    await record.save();
-    res.json(record);
-  } catch (err) { res.status(500).json({ message: err.message }); }
-};
+    borrow.NgayTra = new Date();
+    await borrow.save();
 
-exports.confirmReturn = async (req, res) => {
-  try {
-    const id = req.params.id; // theoDoi id
-    const record = await TheoDoi.findById(id);
-    if (!record) return res.status(404).json({ message: 'Not found' });
-    if (record.trangThai !== 'da_duoc_muon') return res.status(400).json({ message: 'Invalid status' });
-    record.trangThai = 'da_tra';
-    record.ngayTra = new Date();
-    await record.save();
+    // Tăng số lượng sách
+    const book = borrow.MaSach;
+    book.SoQuyen += 1;
+    await book.save();
 
-    // increase book copies
-    const sach = await Sach.findById(record.maSach);
-    sach.soQuyen += 1;
-    await sach.save();
-
-    res.json(record);
-  } catch (err) { res.status(500).json({ message: err.message }); }
-};
-
-exports.cancelRequest = async (req, res) => {
-  try {
-    const id = req.params.id;
-    const rec = await TheoDoi.findById(id);
-    if (!rec) return res.status(404).json({ message: 'Not found' });
-    if (rec.trangThai !== 'cho_duyet') return res.status(400).json({ message: 'Cannot cancel' });
-    rec.trangThai = 'bi_huy';
-    await rec.save();
-    res.json(rec);
-  } catch (err) { res.status(500).json({ message: err.message }); }
+    res.json({ message: "Trả sách thành công!" });
+  } catch (err) {
+    console.error("Lỗi returnBook:", err);
+    res.status(500).json({ message: "Lỗi server khi trả sách" });
+  }
 };

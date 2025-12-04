@@ -1,13 +1,12 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const theodoiCtrl = require('../controllers/theodoi.controller');
-const auth = require('../middleware/auth');
+const auth = require("../middleware/auth");
+const theodoiCtrl = require("../controllers/theodoi.controller");
 
-router.post('/request', auth.verifyToken, auth.requireRole(['docgia']), theodoiCtrl.requestBorrow);
-router.get('/my', auth.verifyToken, auth.requireRole(['docgia']), theodoiCtrl.listForUser);
-router.get('/', auth.verifyToken, auth.requireRole(['admin']), theodoiCtrl.listAll);
-router.post('/:id/confirm', auth.verifyToken, auth.requireRole(['admin']), theodoiCtrl.confirmBorrow);
-router.post('/:id/return', auth.verifyToken, auth.requireRole(['admin']), theodoiCtrl.confirmReturn);
-router.post('/:id/cancel', auth.verifyToken, auth.requireRole(['docgia']), theodoiCtrl.cancelRequest);
+// Lấy lịch sử mượn của 1 user
+router.get("/user/:id", auth.verifyToken, theodoiCtrl.getUserBorrows);
+
+// Trả sách
+router.post("/return/:id", auth.verifyToken, theodoiCtrl.returnBook);
 
 module.exports = router;

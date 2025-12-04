@@ -20,7 +20,7 @@
         <ul class="navbar-nav ms-auto align-items-center gap-3">
 
           <li class="nav-item">
-            <router-link class="nav-link nav-item-custom" to="/">Home</router-link>
+            <router-link class="nav-link nav-item-custom" to="/"></router-link>
           </li>
 
           <!-- Chưa đăng nhập -->
@@ -30,7 +30,7 @@
             </li>
 
             <li class="nav-item">
-              <router-link class="nav-link nav-item-custom" to="/register">Register</router-link>
+              <router-link class="nav-link nav-item-custom" to="/register"></router-link>
             </li>
           </template>
 
@@ -53,15 +53,9 @@
               </a>
 
               <ul class="dropdown-menu dropdown-menu-end shadow">
-                <li>
-                  <router-link class="dropdown-item" to="/profile">Hồ sơ</router-link>
-                </li>
+               
 
-                <li v-if="isAdmin">
-                  <router-link class="dropdown-item" to="/admin/sach"></router-link>
-                </li>
-
-                <li><hr class="dropdown-divider" /></li>
+                
 
                 <!-- Nút đăng xuất -->
                 <li>
