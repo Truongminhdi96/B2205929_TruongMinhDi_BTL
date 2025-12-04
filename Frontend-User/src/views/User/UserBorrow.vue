@@ -1,22 +1,21 @@
 <template>
   <div class="user-borrow p-4">
-    <h3>📖 Lịch Sử Mượn Sách</h3>
+    <h3 class="mb-4">📖 Lịch Sử Mượn Sách</h3>
 
-    <div v-if="borrows.length === 0" class="mt-3">
+    <div v-if="borrows.length === 0" class="alert alert-info">
       Chưa có lịch sử mượn nào
     </div>
 
-    <div class="table-responsive mt-3" v-else>
-      <table class="table table-striped table-bordered align-middle">
+    <div class="table-responsive" v-else>
+      <table class="table table-striped table-bordered align-middle text-center">
         <thead class="table-dark">
           <tr>
-            <th>#</th>
+            <th>STT</th>
             <th>Tên Sách</th>
             <th>Tác Giả</th>
             <th>Ngày Mượn</th>
             <th>Ngày Trả</th>
             <th>Trạng Thái</th>
-            <th>Hành Động</th>
           </tr>
         </thead>
         <tbody>
@@ -27,17 +26,24 @@
             <td>{{ formatDate(b.NgayMuon) }}</td>
             <td>{{ b.NgayTra ? formatDate(b.NgayTra) : "Chưa trả" }}</td>
             <td>
-              <span v-if="b.NgayTra" class="badge bg-success">Đã trả</span>
-              <span v-else class="badge bg-warning text-dark">Chưa trả</span>
-            </td>
-            <td>
-              <button 
-                class="btn btn-sm btn-primary" 
-                v-if="!b.NgayTra" 
-                @click="returnBook(b)"
+              <span
+                v-if="b.TrangThai === 'Đang xét duyệt'"
+                class="badge bg-warning text-dark"
               >
-                Trả sách
-              </button>
+                Đang xét duyệt
+              </span>
+              <span
+                v-else-if="b.TrangThai === 'Đã mượn'"
+                class="badge bg-primary"
+              >
+                Đã mượn
+              </span>
+              <span
+                v-else-if="b.TrangThai === 'Đã trả'"
+                class="badge bg-success"
+              >
+                Đã trả
+              </span>
             </td>
           </tr>
         </tbody>
@@ -77,6 +83,7 @@ export default {
         this.borrows = res.data;
       } catch (err) {
         console.error("Lỗi tải lịch sử mượn:", err.response || err);
+        alert("Không tải được lịch sử mượn!");
       }
     },
     formatDate(dateStr) {
@@ -88,12 +95,12 @@ export default {
       try {
         const token = localStorage.getItem("token");
         const res = await axios.post(
-          `http://localhost:5000/api/theodoi/return/${borrow._id}`,
+          `http://localhost:5000/api/muonsach/return/${borrow._id}`,
           {},
           { headers: { Authorization: `Bearer ${token}` } }
         );
         alert(res.data.message);
-        this.fetchBorrowHistory(); // reload lại danh sách
+        this.fetchBorrowHistory(); // tải lại danh sách sau khi trả
       } catch (err) {
         console.error("Lỗi trả sách:", err.response || err);
         alert(err.response?.data?.message || "Trả sách thất bại!");
@@ -107,7 +114,15 @@ export default {
 .user-borrow h3 {
   font-weight: 600;
 }
+
+.table th,
+.table td {
+  vertical-align: middle;
+}
+
 .badge {
   font-size: 0.9rem;
+  padding: 0.4em 0.6em;
+  border-radius: 12px;
 }
 </style>
