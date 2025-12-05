@@ -3,6 +3,8 @@
 
     <h1 class="mb-4 text-center fw-bold">📊 Admin Dashboard</h1>
 
+    
+
     <!-- Quản lý sách -->
     <section class="mb-5">
       <h3 class="mb-3">📚 Quản lý Sách</h3>
@@ -23,22 +25,30 @@
       <p>Thêm, sửa, xóa NXB và liên kết sách với NXB qua MaNXB</p>
     </section>
 
+    <!-- Quản lý độc giả -->
     <section class="mb-5">
-  <h3 class="mb-3">👤 Quản lý Độc Giả</h3>
-  <div class="d-flex gap-2 mb-2">
-    <!-- Bỏ nút Thêm độc giả -->
-    <button class="btn btn-primary" @click="goTo('admin/docgia')">Xem danh sách độc giả</button>
-  </div>
-  <p>Xem thông tin chi tiết độc giả</p>
-</section>
+      <h3 class="mb-3">👤 Quản lý Độc Giả</h3>
+      <div class="d-flex gap-2 mb-2">
+        <button class="btn btn-primary" @click="goTo('admin/docgia')">Xem danh sách độc giả</button>
+      </div>
+      <p>Xem thông tin chi tiết độc giả</p>
+    </section>
 
-    <!-- Theo dõi mượn sách -->
+    <!-- Theo dõi mượn -->
     <section class="mb-5">
-      <h3 class="mb-3">📈 Theo dõi mượn sách</h3>
+      <h3 class="mb-3">📘 Theo dõi mượn sách</h3>
       <div class="d-flex gap-2 mb-2">
         <button class="btn btn-primary" @click="goTo('admin/theodoi')">Xem theo dõi mượn sách</button>
       </div>
-      <p>Ghi nhận và theo dõi Mã độc giả, Mã sách, Ngày mượn, Ngày trả. Thống kê số lượt mượn theo thời gian.</p>
+      <p>Ghi nhận và theo dõi mượn trả. Thống kê số lượt mượn theo thời gian.</p>
+    </section>
+    <!-- Thống kê -->
+    <section class="mb-5">
+      <h3 class="mb-3">📈 Thống kê tổng quan</h3>
+      <div class="d-flex gap-2 mb-2">
+        <button class="btn btn-primary" @click="goTo('admin/stats')">Xem thống kê</button>
+      </div>
+      <p>Xem tổng số sách, tổng độc giả, lượt mượn theo tháng và biểu đồ trực quan.</p>
     </section>
 
   </div>

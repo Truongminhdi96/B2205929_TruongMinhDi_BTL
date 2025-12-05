@@ -2,6 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/db');
+const thongkeRoutes = require("./routes/thongke");
+
 
 const app = express();
 
@@ -20,7 +22,7 @@ app.use('/api/docgia', require('./routes/docgia.routes'));
 app.use('/api/theodoi', require('./routes/theodoi.routes'));
 app.use('/api/muonsach', require('./routes/muonsach.routes')); // chỉ cần 1 biến duy nhất
 app.use('/api/theodoi', require('./routes/theodoi.routes'));
-
+app.use("/api/thongke", thongkeRoutes);
 // Bắt route không tồn tại
 app.use((req, res) => {
   res.status(404).json({ message: "Không tìm thấy API này!" });

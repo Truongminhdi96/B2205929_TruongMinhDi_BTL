@@ -8,10 +8,16 @@ const DocGiaSchema = new mongoose.Schema({
   DiaChi: String,
   DienThoai: String,
   Email: { type: String, unique: true },
-  Password: String
+  Password: String,
+
+  // ===== TRẠNG THÁI TÀI KHOẢN =====
+  TrangThai: {
+    type: String,
+    enum: ["Hoạt động", "Bị khóa"],
+    default: "Hoạt động"
+  }
 }, {
-  collection: "DOCGIA"  // BẮT BUỘC
+  collection: "DOCGIA"
 });
 
-// BẮT BUỘC: Đặt modelName = tên bảng luôn
 module.exports = mongoose.model("DOCGIA", DocGiaSchema);
